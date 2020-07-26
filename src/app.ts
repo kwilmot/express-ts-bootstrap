@@ -4,10 +4,8 @@ class App {
     public app: express.Application;
 
     constructor() {
-
-
         this.app = express();
-                        this.config();
+        this.config();
         // configure routes
         // routes.register(this.app)
     }
