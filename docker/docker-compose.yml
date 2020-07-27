@@ -1,0 +1,27 @@
+version: '3'
+services:
+  api:
+    container_name: express-bootstrap-api
+    env_file:
+      - ../.env
+    build: .
+    ports:
+    - 3000:${PORT}/tcp
+    links:
+      - db
+  db:
+    container_name: express-bootstrap-db
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    image: postgres:latest
+    ports:
+    - 7896:5432/tcp
+    volumes:
+    - ../dev/db-scripts/:/docker-entrypoint-initdb.d/
+    - pgdata:/var/lib/postgresql/data
+    restart: always
+volumes:
+  pgdata:
+    external: true

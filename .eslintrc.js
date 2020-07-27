@@ -18,5 +18,5 @@ module.exports = {
     env: {
         node: true
     },
-    ignorePatterns:  ["dist"]
+    ignorePatterns:  ["dist", "coverage"]
 }

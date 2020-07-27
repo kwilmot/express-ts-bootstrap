@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Response } from 'express';
 
 class App {
     public app: express.Application;
@@ -8,6 +8,9 @@ class App {
         this.config();
         // configure routes
         // routes.register(this.app)
+        this.app.use('/', (_, res: Response) => {
+            res.send('Hello from express-typescript-bootstrap!');
+        });
     }
 
     private config(): void {
