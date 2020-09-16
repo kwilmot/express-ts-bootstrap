@@ -1,5 +1,5 @@
 ## PREP STAGE
-FROM node:slim AS prep
+FROM node:lts-alpine AS prep
 LABEL stage=builder
 WORKDIR /app
 COPY . /app
@@ -16,7 +16,7 @@ LABEL stage=builder
 RUN npm run build
 
 ## PRODUCTION STAGE
-FROM node:slim
+FROM node:lts-alpine
 ENV PORT 5050
 WORKDIR /app
 COPY --from=build /app/package-lock.json /app

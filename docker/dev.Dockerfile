@@ -1,4 +1,4 @@
-FROM node:slim
+FROM node:lts-alpine
 ENV PORT 5050
 RUN npm i -g ts-node-dev typescript
 WORKDIR /app
