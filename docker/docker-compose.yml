@@ -4,7 +4,9 @@ services:
     container_name: express-bootstrap-api
     env_file:
       - ../.env
-    build: .
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
     ports:
     - 3000:${PORT}/tcp
     links:

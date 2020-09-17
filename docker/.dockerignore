@@ -1,6 +1,7 @@
 ../node_modules
 ../coverage
 ../dist
+../dev
 dev.Dockerfile
 Dockerfile
 docker-compose.yml
