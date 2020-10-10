@@ -12,6 +12,7 @@
     "docker-init": "docker volume create pgdata && docker-compose -f docker/docker-compose.yml up --build -d",
     "docker-teardown": "docker-compose -f docker/docker-compose.yml down && docker volume rm pgdata",
     "docker-init:dev": "docker volume create pgdata && docker-compose -f docker/docker-compose.yml -f docker/docker-compose.dev.yml up --build -d",
+    "docker-stop:dev": "docker container stop express-bootstrap-api express-bootstrap-db",
     "docker-teardown:dev": "docker-compose -f docker/docker-compose.yml -f docker/docker-compose.dev.yml down && docker volume rm pgdata"
   },
   "keywords": [],
