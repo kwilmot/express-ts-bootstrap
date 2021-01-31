@@ -1,16 +1,16 @@
 import express, { Response } from 'express';
+import { Routes } from './api/routes';
 
 class App {
     public app: express.Application;
+    private routes: Routes;
 
     constructor() {
+        this.routes = new Routes();
         this.app = express();
         this.config();
         // configure routes
-        // routes.register(this.app)
-        this.app.use('/', (_, res: Response) => {
-            res.send('Hello from express-typescript-bootstrap!');
-        });
+        this.routes.register(this.app);
     }
 
     private config(): void {
