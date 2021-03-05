@@ -1,5 +1,6 @@
 import express, { Response } from 'express';
 import { Routes } from './api/routes';
+import helmet from 'helmet';
 
 class App {
     public app: express.Application;
@@ -14,6 +15,8 @@ class App {
     }
 
     private config(): void {
+        // * apply general header security using helmet
+        this.app.use(helmet());
         // * support application/json type post data
         this.app.use(express.json());
 
