@@ -1,4 +1,4 @@
-import { NextFunction, Request as expressRequest, Response as expressResponse } from 'express';
+import { Request as expressRequest, Response as expressResponse } from 'express';
 import BaseController, { Methods } from '../base.controller';
 import UsersService from './users.service';
 
@@ -14,11 +14,7 @@ export default class UsersController extends BaseController {
         },
     ];
 
-    public static async handleFetchUsers(
-        _req: expressRequest,
-        res: expressResponse,
-        _next: NextFunction,
-    ): Promise<void> {
+    public static async handleFetchUsers(_req: expressRequest, res: expressResponse): Promise<void> {
         try {
             const result = await UsersService.fetchUsers();
             res.status(200).json(result);
