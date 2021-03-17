@@ -1,19 +1,7 @@
 import { Request as expressRequest, Response as expressResponse } from 'express';
-import BaseController, { Methods } from '../base.controller';
 import UsersService from './users.service';
 
-export default class UsersController extends BaseController {
-    path = '/users';
-
-    routes = [
-        {
-            path: '',
-            method: Methods.GET,
-            handler: UsersController.handleFetchUsers,
-            methodMiddleware: [],
-        },
-    ];
-
+export default class UsersController {
     public static async handleFetchUsers(_req: expressRequest, res: expressResponse): Promise<void> {
         try {
             const result = await UsersService.fetchUsers();

@@ -1,6 +1,6 @@
 import { RequestHandler, Router } from 'express';
 
-export enum Methods {
+export enum HttpMethods {
     GET = 'GET',
     POST = 'POST',
     PUT = 'PUT',
@@ -9,12 +9,11 @@ export enum Methods {
 
 interface IRoute {
     path: string;
-    method: Methods;
+    method: HttpMethods;
     handler: RequestHandler;
     methodMiddleware: RequestHandler[];
 }
-
-export default abstract class BaseController {
+export default abstract class BaseRouter {
     public router: Router = Router();
 
     public pathMiddleware: RequestHandler[] = [];
@@ -24,24 +23,22 @@ export default abstract class BaseController {
     protected abstract readonly routes: IRoute[];
 
     public setRoutes = (): Router => {
-        this.pathMiddleware.forEach((mw) => {
-            this.router.use(mw);
-        });
+        this.loadPathMiddleware();
         this.routes.forEach((route) => {
             switch (route.method) {
-                case Methods.GET: {
+                case HttpMethods.GET: {
                     this.router.get(route.path, ...route.methodMiddleware, route.handler);
                     break;
                 }
-                case Methods.POST: {
+                case HttpMethods.POST: {
                     this.router.post(route.path, ...route.methodMiddleware, route.handler);
                     break;
                 }
-                case Methods.PUT: {
+                case HttpMethods.PUT: {
                     this.router.put(route.path, ...route.methodMiddleware, route.handler);
                     break;
                 }
-                case Methods.DELETE: {
+                case HttpMethods.DELETE: {
                     this.router.delete(route.path, ...route.methodMiddleware, route.handler);
                     break;
                 }
@@ -52,4 +49,10 @@ export default abstract class BaseController {
         });
         return this.router;
     };
+
+    public loadPathMiddleware(): void {
+        this.pathMiddleware.forEach((mw) => {
+            this.router.use(mw);
+        });
+    }
 }
