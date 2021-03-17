@@ -2,9 +2,10 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import helmet from 'helmet';
 import express, { RequestHandler } from 'express';
+import * as http from 'http';
+import BaseRouter from './base.router';
+import UsersRouter from './users/users.router';
 import App from './app';
-import BaseController from './api/base.controller';
-import UsersController from './api/users/users.controller';
 
 // initialize configuration
 dotenv.config();
@@ -12,7 +13,7 @@ dotenv.config();
 if (!process.env.PORT) {
     process.exit(1);
 }
-const PORT = parseInt(process.env.PORT, 10);
+const { PORT } = process.env;
 
 const globalMiddleware: RequestHandler[] = [
     // * apply general header security using helmet
@@ -25,10 +26,13 @@ const globalMiddleware: RequestHandler[] = [
     express.urlencoded({ extended: false }),
 ];
 
-const controllers: BaseController[] = [new UsersController()];
+const routers: BaseRouter[] = [new UsersRouter()];
 
-const app = new App(PORT);
+const appInstance = new App();
 
-app.loadGlobalMiddleware(globalMiddleware);
-app.loadControllers(controllers);
-app.startServer();
+appInstance.loadGlobalMiddleware(globalMiddleware);
+appInstance.loadRouters(routers);
+const server = http.createServer(appInstance.expressApplication);
+server.listen(PORT, () => {
+    console.log(`Node Express Bootstrap listening on ${PORT}`);
+});

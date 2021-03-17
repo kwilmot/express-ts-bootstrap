@@ -1,26 +1,18 @@
 import express, { RequestHandler } from 'express';
-import BaseController from './api/base.controller';
+import BaseRouter from './base.router';
 
 export default class App {
-    public app: express.Application = express();
-
-    constructor(private port: number) {}
-
-    public startServer(): void {
-        this.app.listen(this.port, () => {
-            console.log(`bootstrap app listening on port: ${this.port}`);
-        });
-    }
+    public expressApplication: express.Application = express();
 
     public loadGlobalMiddleware(globalMiddleware: RequestHandler[]): void {
         globalMiddleware.forEach((mw) => {
-            this.app.use(mw);
+            this.expressApplication.use(mw);
         });
     }
 
-    public loadControllers(controllers: BaseController[]): void {
-        controllers.forEach((controller) => {
-            this.app.use(controller.path, controller.setRoutes());
+    public loadRouters(routes: BaseRouter[]): void {
+        routes.forEach((route) => {
+            this.expressApplication.use(route.path, route.setRoutes());
         });
     }
 }
