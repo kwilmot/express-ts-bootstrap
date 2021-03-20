@@ -51,7 +51,7 @@ class TypicalRouter extends BaseRouter {
 
     pathMiddleware = [namedMiddleware];
 
-    public static testHandler(): void {}
+    public static testHandler = (): void => {};
 }
 
 class BrokenRouter extends BaseRouter {
@@ -93,7 +93,7 @@ describe('BaseRouter', () => {
         });
         it('should throw error if unknown Http Method is attempted', () => {
             const classInstance = new BrokenRouter();
-            expect(classInstance.setRoutes).toThrowError('Unrecognized http method: UNKNOWN');
+            expect(classInstance.setRoutes).toThrowError('Unrecognized http method');
         });
     });
     describe('loadPathMiddleware', () => {
