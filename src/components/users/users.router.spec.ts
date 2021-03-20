@@ -1,5 +1,5 @@
 import UsersRouter from './users.router';
-import { HttpMethods } from '../base.router';
+import { HttpMethods } from '../../base.router';
 import UsersController from './users.controller';
 
 describe('UsersRouter', () => {

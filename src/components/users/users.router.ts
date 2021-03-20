@@ -1,4 +1,4 @@
-import BaseRouter, { HttpMethods } from '../base.router';
+import BaseRouter, { HttpMethods } from '../../base.router';
 import UsersController from './users.controller';
 
 export default class UsersRouter extends BaseRouter {
