@@ -43,7 +43,7 @@ export default abstract class BaseRouter {
                     break;
                 }
                 default: {
-                    throw new Error(`Unrecognized http method: ${route.method}`);
+                    throw new Error('Unrecognized http method');
                 }
             }
         });

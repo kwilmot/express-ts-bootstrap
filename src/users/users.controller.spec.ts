@@ -26,9 +26,10 @@ describe('UsersController', () => {
                 },
             ];
             const fetchUsersSpy = spyOn(UsersService, 'fetchUsers');
+            const statusSpy = spyOn(mockResponse, 'status');
             fetchUsersSpy.mockResolvedValueOnce(mockUsers);
             await UsersController.handleFetchUsers(mockRequest, mockResponse);
-            expect(mockResponse.status).toBeCalledWith(200);
+            expect(statusSpy).toBeCalledWith(200);
             expect(mockResponse.json).toBeCalledWith(mockUsers);
         });
         it('should result in a 500 with an error if getting users fails', async () => {
@@ -41,12 +42,13 @@ describe('UsersController', () => {
             console.error = jest.fn();
             const errorSpy = spyOn(console, 'error');
             const fetchUsersSpy = spyOn(UsersService, 'fetchUsers');
+            const statusSpy = spyOn(mockResponse, 'status');
             const mockError = new Error('test rejection');
             fetchUsersSpy.mockRejectedValueOnce(mockError);
             await UsersController.handleFetchUsers(mockRequest, mockResponse);
             expect(errorSpy).toBeCalledWith(mockError);
-            expect(mockResponse.status).toBeCalledWith(500);
-            expect(mockResponse.send).toBeCalledWith('test rejection');
+            expect(statusSpy).toBeCalledWith(500);
+            expect(mockResponse.send).toBeCalledWith(mockError);
         });
     });
 });
