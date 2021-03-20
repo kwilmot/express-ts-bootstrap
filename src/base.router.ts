@@ -1,4 +1,5 @@
 import { RequestHandler, Router } from 'express';
+import AppError from './utilities/app.error';
 
 export enum HttpMethods {
     GET = 'GET',
@@ -43,7 +44,11 @@ export default abstract class BaseRouter {
                     break;
                 }
                 default: {
-                    throw new Error('Unrecognized http method');
+                    throw new AppError(
+                        'UnknownHttpMethod',
+                        `Router received an unexpected method: ${route.method as string}`,
+                        false,
+                    );
                 }
             }
         });

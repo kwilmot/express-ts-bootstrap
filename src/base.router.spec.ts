@@ -1,6 +1,7 @@
 // eslint-disable-next-line max-classes-per-file
 import { Request as expressRequest, RequestHandler, Response as expressResponse } from 'express';
 import BaseRouter, { HttpMethods } from './base.router';
+import AppError from './utilities/app.error';
 import spyOn = jest.spyOn;
 
 jest.mock('express', () => {
@@ -93,7 +94,8 @@ describe('BaseRouter', () => {
         });
         it('should throw error if unknown Http Method is attempted', () => {
             const classInstance = new BrokenRouter();
-            expect(classInstance.setRoutes).toThrowError('Unrecognized http method');
+            const mockError = new AppError('UnknownHttpMethod', 'Router received an unexpected method: UNKNOWN', false);
+            expect(classInstance.setRoutes).toThrowError(mockError);
         });
     });
     describe('loadPathMiddleware', () => {

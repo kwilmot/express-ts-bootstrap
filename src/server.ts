@@ -4,8 +4,10 @@ import helmet from 'helmet';
 import express, { RequestHandler } from 'express';
 import * as http from 'http';
 import BaseRouter from './base.router';
-import UsersRouter from './users/users.router';
+import UsersRouter from './components/users/users.router';
 import App from './app';
+import ErrorHandler from './utilities/error.handler';
+import errorMiddleware from './globalMiddleware/error.middleware';
 
 // initialize configuration
 dotenv.config();
@@ -32,7 +34,19 @@ const appInstance = new App();
 
 appInstance.loadGlobalMiddleware(globalMiddleware);
 appInstance.loadRouters(routers);
+// TODO: Consider creating preLoadGlobalMiddleware and postLoadGlobalMiddleware methods on the App class
+appInstance.expressApplication.use(errorMiddleware);
 const server = http.createServer(appInstance.expressApplication);
 server.listen(PORT, () => {
     console.log(`Node Express Bootstrap listening on ${PORT}`);
 });
+
+process.on('uncaughtException', (error: Error) => {
+    // eslint-disable-next-line no-void
+    void ErrorHandler.handleError(error);
+});
+
+// TODO: revisit handling unhandledRejection errors / are these possible in Typescript 4 and node 14.5?
+// process.on('unhandledRejection', (reason) => {
+//     void ErrorHandler.handleError(reason);
+// });
