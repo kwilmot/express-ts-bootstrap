@@ -49,6 +49,6 @@ process.on('uncaughtException', (error: Error) => {
 });
 
 // TODO: revisit handling unhandledRejection errors / are these possible in Typescript 4 and node 14.5?
-// process.on('unhandledRejection', (reason) => {
-//     void ErrorHandler.handleError(reason);
-// });
+process.on('unhandledRejection', (reason: string) => {
+    throw new Error(reason);
+});
