@@ -9,11 +9,10 @@
     "lint": "eslint \"*/**/*.{js,ts}\" --quiet --fix",
     "start": "npm run build && node ./dist/server.js",
     "start:dev": "ts-node-dev ./src/server.ts | pino-pretty",
-    "docker:start": "docker volume create pgdata && docker-compose -f docker/docker-compose.yml up --build -d",
-    "docker:teardown": "docker-compose -f docker/docker-compose.yml down && docker volume rm pgdata",
-    "docker:start:dev": "docker volume create pgdata && docker-compose -f docker/docker-compose.yml -f docker/docker-compose.dev.yml up --build -d",
-    "docker:stop:dev": "docker container stop express-bootstrap-api express-bootstrap-db",
-    "docker:teardown:dev": "docker-compose -f docker/docker-compose.yml -f docker/docker-compose.dev.yml down && docker volume rm pgdata"
+    "docker:start": "docker volume create dbdata && docker-compose --env-file ../.env -f docker/docker-compose.yml up --build -d",
+    "docker:teardown": "docker-compose --env-file ../.env -f docker/docker-compose.yml down && docker volume rm dbdata",
+    "docker:start:dev": "docker volume create dbdata && docker-compose --env-file ../.env -f docker/docker-compose.yml -f docker/docker-compose.dev.yml up --build -d",
+    "docker:teardown:dev": "docker-compose --env-file ../.env -f docker/docker-compose.yml -f docker/docker-compose.dev.yml down && docker volume rm dbdata"
   },
   "keywords": [],
   "author": "",
