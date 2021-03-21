@@ -1,10 +1,10 @@
 import { Response as expressResponse } from 'express';
 import AppError from './app.error';
+import { logger } from './logger';
 
 export default class ErrorHandler {
-    // eslint-disable-next-line @typescript-eslint/require-await
-    public static handleError = async (error: Error, responseStream?: expressResponse): Promise<void> => {
-        // await logger.logError(error);
+    public static handleError = (error: Error, responseStream?: expressResponse): void => {
+        logger.error(error);
         ErrorHandler.crashIfUntrustedErrorOrSendResponse(error, responseStream);
     };
 

@@ -12,7 +12,11 @@ jest.mock('./users.service', () => {
 describe('UsersController', () => {
     describe('handleFetchUsers', () => {
         const mockNext = jest.fn() as NextFunction;
-        const mockRequest: expressRequest = {} as expressRequest;
+        const mockRequest: expressRequest = ({
+            log: {
+                info: jest.fn(),
+            },
+        } as unknown) as expressRequest;
         const mockResponse: expressResponse = ({
             status: jest.fn().mockReturnThis(),
             json: jest.fn(),
@@ -26,6 +30,7 @@ describe('UsersController', () => {
                     colors: ['green', 'red'],
                 },
             ];
+            UsersService.fetchUsers = jest.fn();
             const fetchUsersSpy = spyOn(UsersService, 'fetchUsers');
             const statusSpy = spyOn(mockResponse, 'status');
             fetchUsersSpy.mockResolvedValueOnce(mockUsers);

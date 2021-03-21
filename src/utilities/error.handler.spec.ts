@@ -1,19 +1,32 @@
 import { Response as expressResponse } from 'express';
 import ErrorHandler from './error.handler';
 import AppError from './app.error';
+import { logger } from './logger';
 import spyOn = jest.spyOn;
 
 describe('ErrorHandler', () => {
     describe('handleError', () => {
-        it('should call crashIfUntrustedErrorOrSendResponse with provided error and response stream', async () => {
+        it('should log the error', () => {
             const testError = new AppError('TestError', 'Error for testing handleError', true);
             const mockResponse = ({
                 status: jest.fn().mockReturnThis(),
                 send: jest.fn(),
             } as unknown) as expressResponse;
+            logger.error = jest.fn();
+            const loggerErrorSpy = spyOn(logger, 'error');
+            ErrorHandler.handleError(testError, mockResponse);
+            expect(loggerErrorSpy).toBeCalledWith(testError);
+        });
+        it('should call crashIfUntrustedErrorOrSendResponse with provided error and response stream', () => {
+            const testError = new AppError('TestError', 'Error for testing handleError', true);
+            const mockResponse = ({
+                status: jest.fn().mockReturnThis(),
+                send: jest.fn(),
+            } as unknown) as expressResponse;
+            logger.error = jest.fn();
             const crashIfUntrustedErrorOrSendResponseSpy = spyOn(ErrorHandler, 'crashIfUntrustedErrorOrSendResponse');
             crashIfUntrustedErrorOrSendResponseSpy.mockReturnValueOnce(undefined);
-            await ErrorHandler.handleError(testError, mockResponse);
+            ErrorHandler.handleError(testError, mockResponse);
             expect(crashIfUntrustedErrorOrSendResponseSpy).toBeCalledWith(testError, mockResponse);
         });
     });
