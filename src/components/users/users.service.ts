@@ -1,3 +1,5 @@
+import { logger } from '../../utilities/logger';
+
 export interface IUser {
     id: number;
     name: string;
@@ -6,6 +8,7 @@ export interface IUser {
 
 export default class UsersService {
     public static async fetchUsers(): Promise<IUser[]> {
+        logger.debug('fetching users...');
         return new Promise<IUser[]>((resolve) => {
             setTimeout(() => {
                 resolve([

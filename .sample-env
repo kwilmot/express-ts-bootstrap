@@ -1,5 +1,7 @@
 # Set to production when deploying to production system
 NODE_ENV=development
+# Set to info  when deploying to production system
+LOG_LEVEL=debug
 
 # Node.js server port
 PORT=3000

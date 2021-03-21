@@ -1,4 +1,5 @@
 import UsersService, { IUser } from './users.service';
+import { logger } from '../../utilities/logger';
 
 describe('UsersService', () => {
     describe('fetchUsers', () => {
@@ -15,6 +16,7 @@ describe('UsersService', () => {
                     name: 'User 2',
                 },
             ];
+            logger.debug = jest.fn();
             const result = UsersService.fetchUsers();
             jest.runAllTimers();
             await expect(result).resolves.toStrictEqual(mockUsers);

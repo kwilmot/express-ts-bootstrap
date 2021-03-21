@@ -8,6 +8,7 @@ import UsersRouter from './components/users/users.router';
 import App from './app';
 import ErrorHandler from './utilities/error.handler';
 import errorMiddleware from './globalMiddleware/error.middleware';
+import { expressLogger, logger } from './utilities/logger';
 
 // initialize configuration
 dotenv.config();
@@ -26,6 +27,8 @@ const globalMiddleware: RequestHandler[] = [
     express.json(),
     // * support application/x-www-form-urlencoded post data
     express.urlencoded({ extended: false }),
+    // * support logging of requests
+    expressLogger,
 ];
 
 const routers: BaseRouter[] = [new UsersRouter()];
@@ -38,12 +41,11 @@ appInstance.loadRouters(routers);
 appInstance.expressApplication.use(errorMiddleware);
 const server = http.createServer(appInstance.expressApplication);
 server.listen(PORT, () => {
-    console.log(`Node Express Bootstrap listening on ${PORT}`);
+    logger.info(`Node Express Bootstrap listening on ${PORT}`);
 });
 
 process.on('uncaughtException', (error: Error) => {
-    // eslint-disable-next-line no-void
-    void ErrorHandler.handleError(error);
+    ErrorHandler.handleError(error);
 });
 
 // TODO: revisit handling unhandledRejection errors / are these possible in Typescript 4 and node 14.5?
