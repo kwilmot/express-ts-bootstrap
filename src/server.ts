@@ -1,5 +1,10 @@
-import cors from 'cors';
 import dotenv from 'dotenv';
+// initialize configuration, dotenv must be launched and configured before any other files construct in order for changes
+// from .env file to propagate.
+dotenv.config();
+
+/* eslint-disable  import/first */
+import cors from 'cors';
 import helmet from 'helmet';
 import express, { RequestHandler } from 'express';
 import * as http from 'http';
@@ -9,16 +14,14 @@ import App from './app';
 import ErrorHandler from './utilities/error.handler';
 import errorMiddleware from './globalMiddleware/error.middleware';
 import { expressLogger, logger } from './utilities/logger';
-
-// initialize configuration
-dotenv.config();
+/* eslint-enable import/first */
 
 if (!process.env.PORT) {
     process.exit(1);
 }
 const { PORT } = process.env;
 
-const globalMiddleware: RequestHandler[] = [
+const preRequestGlobalMiddleware: RequestHandler[] = [
     // * apply general header security using helmet
     helmet(),
     // * apply CORS rules
@@ -35,10 +38,16 @@ const routers: BaseRouter[] = [new UsersRouter()];
 
 const appInstance = new App();
 
-appInstance.loadGlobalMiddleware(globalMiddleware);
+/**
+ * In Express JS, load order of middleware is very important. They will be fired in order  they are loaded.
+ * For this reason, we load our preRequestGlobalMiddleware in before setting our routes.
+ * Once we load our routers (which will invoke setRoutes, which in turn fires off path and method middleware),
+ * only then do we wish to handle our errors. Thus, at the top level we call .use against our custom errorMiddleware
+ */
+appInstance.loadGlobalMiddleware(preRequestGlobalMiddleware);
 appInstance.loadRouters(routers);
-// TODO: Consider creating preLoadGlobalMiddleware and postLoadGlobalMiddleware methods on the App class
 appInstance.expressApplication.use(errorMiddleware);
+
 const server = http.createServer(appInstance.expressApplication);
 server.listen(PORT, () => {
     logger.info(`Node Express Bootstrap listening on ${PORT}`);
