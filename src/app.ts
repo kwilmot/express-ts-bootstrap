@@ -10,9 +10,9 @@ export default class App {
         });
     }
 
-    public loadRouters(routes: BaseRouter[]): void {
-        routes.forEach((route) => {
-            this.expressApplication.use(route.path, route.setRoutes());
+    public loadRouters(routers: BaseRouter[]): void {
+        routers.forEach((router) => {
+            this.expressApplication.use(router.path, router.setRoutes());
         });
     }
 }

@@ -1,11 +1,10 @@
 import { RequestHandler, Router } from 'express';
-import AppError from './utilities/app.error';
 
 export enum HttpMethods {
-    GET = 'GET',
-    POST = 'POST',
-    PUT = 'PUT',
-    DELETE = 'DELETE',
+    GET = 'get',
+    POST = 'post',
+    PUT = 'put',
+    DELETE = 'delete',
 }
 
 interface IRoute {
@@ -14,8 +13,14 @@ interface IRoute {
     handler: RequestHandler;
     methodMiddleware: RequestHandler[];
 }
+
+// TODO: come up with SOLID way to extend routers from each other (ex. '/users', '/users/tests' where tests is its router built off of users
 export default abstract class BaseRouter {
-    public router: Router = Router();
+    private readonly router: Router;
+
+    constructor(router: Router = Router()) {
+        this.router = router;
+    }
 
     public pathMiddleware: RequestHandler[] = [];
 
@@ -26,31 +31,7 @@ export default abstract class BaseRouter {
     public setRoutes = (): Router => {
         this.loadPathMiddleware();
         this.routes.forEach((route) => {
-            switch (route.method) {
-                case HttpMethods.GET: {
-                    this.router.get(route.path, ...route.methodMiddleware, route.handler);
-                    break;
-                }
-                case HttpMethods.POST: {
-                    this.router.post(route.path, ...route.methodMiddleware, route.handler);
-                    break;
-                }
-                case HttpMethods.PUT: {
-                    this.router.put(route.path, ...route.methodMiddleware, route.handler);
-                    break;
-                }
-                case HttpMethods.DELETE: {
-                    this.router.delete(route.path, ...route.methodMiddleware, route.handler);
-                    break;
-                }
-                default: {
-                    throw new AppError(
-                        'UnknownHttpMethod',
-                        `Router received an unexpected method: ${route.method as string}`,
-                        false,
-                    );
-                }
-            }
+            this.router[route.method](route.path, ...route.methodMiddleware, route.handler);
         });
         return this.router;
     };
@@ -60,4 +41,9 @@ export default abstract class BaseRouter {
             this.router.use(mw);
         });
     }
+
+    // TODO should we allow class children to get the parent router for extension? how do we lock down top level routers
+    // protected getRouterForExtension(router: BaseRouter): Router {
+    //   return this.router;
+    // }
 }

@@ -1,9 +1,11 @@
-import { Response as expressResponse, Request as expressRequest, RequestHandler } from 'express';
+import { Response as expressResponse, Request as expressRequest, RequestHandler, Router } from 'express';
 import App from './app';
 import BaseRouter from './base.router';
 import spyOn = jest.spyOn;
 
-class MockRouter extends BaseRouter {
+const mockRouter = (jest.fn() as unknown) as Router;
+
+class MockRouterClass extends BaseRouter {
     path = '/mock';
 
     pathMiddleware = [];
@@ -12,7 +14,7 @@ class MockRouter extends BaseRouter {
 
     loadPathMiddleware = jest.fn();
 
-    setRoutes = () => this.router;
+    setRoutes = () => mockRouter;
 }
 
 describe('App', () => {
@@ -29,11 +31,11 @@ describe('App', () => {
     describe('loadRouters', () => {
         it('should call app.use against each provided router with the path and the setRoutes() as arguments', () => {
             const classInstance = new App();
-            const mockRouter = new MockRouter();
-            const mockRouters: BaseRouter[] = [mockRouter];
+            const mockRouterInstance = new MockRouterClass(mockRouter);
+            const mockRouters: BaseRouter[] = [mockRouterInstance];
             const useSpy = spyOn(classInstance.expressApplication, 'use');
             classInstance.loadRouters(mockRouters);
-            expect(useSpy).toBeCalledWith('/mock', mockRouter.setRoutes());
+            expect(useSpy).toBeCalledWith('/mock', mockRouterInstance.setRoutes());
         });
     });
 });
