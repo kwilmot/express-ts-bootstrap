@@ -8,10 +8,10 @@ describe('ErrorHandler', () => {
     describe('handleError', () => {
         it('should log the error', () => {
             const testError = new AppError('TestError', 'Error for testing handleError', true);
-            const mockResponse = ({
+            const mockResponse = {
                 status: jest.fn().mockReturnThis(),
                 send: jest.fn(),
-            } as unknown) as expressResponse;
+            } as unknown as expressResponse;
             logger.error = jest.fn();
             const loggerErrorSpy = spyOn(logger, 'error');
             ErrorHandler.handleError(testError, mockResponse);
@@ -19,10 +19,10 @@ describe('ErrorHandler', () => {
         });
         it('should call crashIfUntrustedErrorOrSendResponse with provided error and response stream', () => {
             const testError = new AppError('TestError', 'Error for testing handleError', true);
-            const mockResponse = ({
+            const mockResponse = {
                 status: jest.fn().mockReturnThis(),
                 send: jest.fn(),
-            } as unknown) as expressResponse;
+            } as unknown as expressResponse;
             logger.error = jest.fn();
             const crashIfUntrustedErrorOrSendResponseSpy = spyOn(ErrorHandler, 'crashIfUntrustedErrorOrSendResponse');
             crashIfUntrustedErrorOrSendResponseSpy.mockReturnValueOnce(undefined);
@@ -31,10 +31,10 @@ describe('ErrorHandler', () => {
         });
     });
     describe('crashIfUntrustedErrorOrSendResponse', () => {
-        const mockResponse = ({
+        const mockResponse = {
             status: jest.fn().mockReturnThis(),
             send: jest.fn(),
-        } as unknown) as expressResponse;
+        } as unknown as expressResponse;
         const isTrustedErrorSpy = spyOn(ErrorHandler, 'isTrustedError');
         const statusSpy = spyOn(mockResponse, 'status');
         const sendSpy = spyOn(mockResponse, 'send');

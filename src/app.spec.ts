@@ -3,7 +3,7 @@ import App from './app';
 import BaseRouter from './base.router';
 import spyOn = jest.spyOn;
 
-const mockRouter = (jest.fn() as unknown) as Router;
+const mockRouter = jest.fn() as unknown as Router;
 
 class MockRouterClass extends BaseRouter {
     path = '/mock';

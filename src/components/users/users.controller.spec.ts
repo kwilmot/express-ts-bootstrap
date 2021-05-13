@@ -12,16 +12,16 @@ jest.mock('./users.service', () => {
 describe('UsersController', () => {
     describe('handleFetchUsers', () => {
         const mockNext = jest.fn() as NextFunction;
-        const mockRequest: expressRequest = ({
+        const mockRequest: expressRequest = {
             log: {
                 info: jest.fn(),
             },
-        } as unknown) as expressRequest;
-        const mockResponse: expressResponse = ({
+        } as unknown as expressRequest;
+        const mockResponse: expressResponse = {
             status: jest.fn().mockReturnThis(),
             json: jest.fn(),
             send: jest.fn(),
-        } as unknown) as expressResponse;
+        } as unknown as expressResponse;
         it('should result in a 200 with a JSON payload of users if getting users is successful', async () => {
             const mockUsers: IUser[] = [
                 {

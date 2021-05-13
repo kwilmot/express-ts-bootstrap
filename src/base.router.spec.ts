@@ -40,13 +40,13 @@ class TypicalRouter extends BaseRouter {
 }
 
 describe('BaseRouter', () => {
-    const mockRouter = ({
+    const mockRouter = {
         use: jest.fn(),
         get: jest.fn(),
         post: jest.fn(),
         put: jest.fn(),
         delete: jest.fn(),
-    } as unknown) as Router;
+    } as unknown as Router;
     describe('setRoutes', () => {
         it('should call loadPathMiddleware', () => {
             const classInstance = new TypicalRouter();
