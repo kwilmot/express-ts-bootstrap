@@ -1,0 +1,10 @@
+version: '3'
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    volumes:
+      - .:/opt/express-ts-bootstrap/app:delegated # delegated helps with file mounting performance on MacOs
+      - /opt/express-ts-bootstrap/app/node_modules # creates an anonymous directory to hide host node_modules to force container node_modules use

@@ -3,10 +3,11 @@ services:
   api:
     container_name: express-bootstrap-api
     env_file:
-      - ../.env
+      - .env
     build:
-      context: ../
-      dockerfile: ./docker/Dockerfile
+      context: .
+      dockerfile: Dockerfile
+      target: prod
     ports:
     - 3000:${PORT}/tcp
 # The following can be brought back if you want to introduce a db service to this template
