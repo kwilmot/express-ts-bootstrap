@@ -1,5 +1,5 @@
 ## Base Image
-FROM node:14.17.0-alpine3.13 AS base
+FROM node:14.17.1-alpine3.13 AS base
 LABEL stage="base"
 ENV PORT=80
 EXPOSE $PORT
