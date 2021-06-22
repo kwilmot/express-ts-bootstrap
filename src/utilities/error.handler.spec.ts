@@ -31,13 +31,19 @@ describe('ErrorHandler', () => {
         });
     });
     describe('crashIfUntrustedErrorOrSendResponse', () => {
-        const mockResponse = {
-            status: jest.fn().mockReturnThis(),
-            send: jest.fn(),
-        } as unknown as expressResponse;
-        const isTrustedErrorSpy = spyOn(ErrorHandler, 'isTrustedError');
-        const statusSpy = spyOn(mockResponse, 'status');
-        const sendSpy = spyOn(mockResponse, 'send');
+        let mockResponse: expressResponse;
+        let isTrustedErrorSpy: jest.SpyInstance;
+        let statusSpy: jest.SpyInstance;
+        let sendSpy: jest.SpyInstance;
+        beforeEach(() => {
+            mockResponse = {
+                status: jest.fn().mockReturnThis(),
+                send: jest.fn(),
+            } as unknown as expressResponse;
+            isTrustedErrorSpy = spyOn(ErrorHandler, 'isTrustedError');
+            statusSpy = spyOn(mockResponse, 'status');
+            sendSpy = spyOn(mockResponse, 'send');
+        });
         it('should call process.exit if isTrustedError returns false', () => {
             const testError = new AppError('TestError', 'Error for testing crashIfUntrustedErrorOrSendResponse', false);
             process.exit = jest.fn() as never;
@@ -52,6 +58,16 @@ describe('ErrorHandler', () => {
             ErrorHandler.crashIfUntrustedErrorOrSendResponse(testError, mockResponse);
             expect(statusSpy).toBeCalledWith(500);
             expect(sendSpy).toBeCalledWith('Error for testing crashIfUntrustedErrorOrSendResponse');
+        });
+        /**
+         * TODO: determine the operational expectations if the error is known but a stream is not defined
+         */
+        it('should do nothing if a response is operational but no stream is provided', () => {
+            const testError = new AppError('TestError', 'Error for testing crashIfUntrustedErrorOrSendResponse', true);
+            isTrustedErrorSpy.mockReturnValueOnce(true);
+            ErrorHandler.crashIfUntrustedErrorOrSendResponse(testError, undefined);
+            expect(statusSpy).not.toBeCalled();
+            expect(sendSpy).not.toBeCalled();
         });
         it('should return a response with custom status code if error is operational and status code was defined', () => {
             const testError = new AppError(
