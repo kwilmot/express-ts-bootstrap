@@ -10,10 +10,10 @@
     "lint": "eslint \"*/**/*.{js,ts}\" --quiet --fix",
     "start": "npm run build && node ./dist/server.js",
     "start:dev": "ts-node-dev ./src/server.ts | pino-pretty",
-    "docker:start": "docker volume create dbdata && docker compose --env-file .env -f docker-compose.yml up --build -d",
-    "docker:teardown": "docker compose --env-file .env -f docker-compose.yml down && docker volume rm dbdata",
-    "docker:start:dev": "docker volume create dbdata && docker compose --env-file .env -f docker-compose.yml -f docker-compose.dev.yml up --build -d",
-    "docker:teardown:dev": "docker compose --env-file .env -f docker-compose.yml -f docker-compose.dev.yml down && docker volume rm dbdata"
+    "docker:start": "docker compose --env-file .env -f docker-compose.yml up --build -d",
+    "docker:teardown": "docker compose --env-file .env -f docker-compose.yml down -v",
+    "docker:start:dev": "docker compose --env-file .env -f docker-compose.yml -f docker-compose.dev.yml up --build -d",
+    "docker:teardown:dev": "docker compose --env-file .env -f docker-compose.yml -f docker-compose.dev.yml down -v"
   },
   "keywords": [],
   "author": "",

@@ -28,4 +28,4 @@ services:
 #    restart: always
 volumes:
   dbdata:
-    external: true
+    external: false
