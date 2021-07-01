@@ -7,10 +7,4 @@ services:
       target: dev
     volumes:
       - .:/opt/express-ts-bootstrap/app:delegated # delegated helps with file mounting performance on MacOs
-#      NOTE: Typically the following line would create an anonymous volume that would be cleaned up with "docker compose down -v".
-#      However, at this time (06/29/2021) the anonymous volumes are not being removed. For this reason, we have created a
-#      local volume, accomplishing the same task as previously but also allowing us to remove the volume with the "-v" argument
-      - ignored-node-modules:/opt/express-ts-bootstrap/app/node_modules # creates an anonymous directory to hide host node_modules to force container node_modules use
-volumes:
-  ignored-node-modules:
-    external: false
+      - /opt/express-ts-bootstrap/app/node_modules # creates an anonymous directory to hide host node_modules to force container node_modules use
