@@ -5,9 +5,10 @@ ENV PORT=80
 EXPOSE $PORT
 ENV NODE_ENV=production
 WORKDIR /opt/express-ts-bootstrap
-RUN chown node /opt/express-ts-bootstrap -R
+RUN mkdir /opt/express-ts-bootstrap
+RUN chown -R node:node /opt/express-ts-bootstrap
 USER node
-COPY package*.json .
+COPY --chown=node:node package*.json ./
 RUN npm ci --only=prodction --ignore-scripts \
     && npm cache clean --force
 ENV PATH=/opt/express-ts-bootstrap/node_modules/.bin:$PATH
@@ -27,7 +28,7 @@ CMD ["ts-node-dev", "./src/server.ts"]
 ## Source Stage
 FROM prep as source
 LABEL stage="source"
-COPY . .
+COPY --chown=node:node . .
 
 ## Test Stage
 FROM source as test
